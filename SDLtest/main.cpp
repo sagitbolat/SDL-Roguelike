@@ -1,7 +1,9 @@
 #include "game.h"
 #include "rendering.h"
 #include "inputHandler.h"
+#include "SDL_Main.h"
 #include <iostream>
+#include <ctime>
 
 
 const char* TITLE = "Game";
@@ -12,10 +14,15 @@ input::Key GetInput();
 input::Key lastInput;
 
 
-int main(int argc, char** argv) {
+int SDL_main(int argc, char** argv) {
     InitEverything();
 
     GameLoop();
+
+
+    delete[] rendering::pixels;
+    SDL_DestroyTexture(rendering::_texture);
+    SDL_DestroyRenderer(rendering::_renderer);
     return 0;
 }
 
@@ -29,7 +36,11 @@ void InitEverything() {
 }
 
 void GameLoop() {
+    clock_t timer; //for measuring loop runtime
     while (game::gameState != game::GameState::GAME_QUIT) {
+        
+        timer = clock(); //start timer
+
         //Process input
         input::Key input = GetInput();
 
@@ -43,24 +54,28 @@ void GameLoop() {
         if (input == input::Key::RELEASE) {
             lastInput = input;
             continue;
+        } else if (input == input::Key::QUIT) {
+            game::gameState = game::GameState::GAME_QUIT;
+            continue;
         }
 
 
         //Do game logic based on input
         game::WorldState state = game::GetUpdatedWorld(input);
-        std::cout << "UPDATED WORLD" << std::endl;
+        //std::cout << "UPDATED WORLD" << std::endl;
         //Render gameworld
-
+        rendering::DisplayWorld(state);
         lastInput = input;
+
+        timer = clock() - timer;
+        std::cout << "One game loop took: " << (double)timer/CLOCKS_PER_SEC << " seconds" << std::endl;
     }
 }
 
 input::Key GetInput() {
     SDL_Event input;
-    if (SDL_PollEvent(&input) == 1)
-    //SDL_PollEvent(&input);
-        return input::PollInput(input);
-    else return input::Key::RELEASE;
+    SDL_PollEvent(&input);
+    return input::PollInput(input);
 }
 
 

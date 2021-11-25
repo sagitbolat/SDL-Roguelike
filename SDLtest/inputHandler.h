@@ -18,6 +18,8 @@ namespace input {
 		RELEASE = 9 // RELEASE IS ONLY USED FOR BUFFERING BETWEEN KEYPRESSES. NOT FOR FUNCTIONALITY
 	};
 
+	extern Key currentInput;
+
 	Key PollInput(SDL_Event inputEvent);
 
 }

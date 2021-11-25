@@ -28,6 +28,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="inputHandler.h" />
     <ClInclude Include="rendering.h" />
+    <ClInclude Include="tile.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

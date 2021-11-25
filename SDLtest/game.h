@@ -5,11 +5,19 @@ namespace game {
 	/*
 		Map size constants
 	*/
-	const int MAP_WIDTH = 1;
-	const int MAP_HEIGHT = 1;
+	const int MAP_WIDTH = 16;
+	const int MAP_HEIGHT = 8;
+
+	enum class TileType {
+		EMPTY = 0,
+		FLOOR = 1,
+		WALL = 2,
+		CHARACTER = 3,
+		ENEMY = 4
+	};
 
 	struct WorldState {
-		int map[MAP_HEIGHT][MAP_WIDTH];
+		TileType map[MAP_HEIGHT][MAP_WIDTH];
 	};
 
 	/*
