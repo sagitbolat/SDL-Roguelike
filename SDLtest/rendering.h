@@ -15,5 +15,5 @@ namespace rendering {
 
 
 	void InitRender(const char* title, int x, int y, int w, int h, Uint32 flags);
-	void DisplayWorld(game::WorldState &state);
+	void DisplayWorld(game::WorldState state);
 }

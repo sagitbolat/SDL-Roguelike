@@ -5,7 +5,7 @@ using namespace input;
 
 namespace game {
 
-	WorldState state;
+	WorldState* state = new WorldState;
 
 	GameState gameState;
 
@@ -30,6 +30,11 @@ namespace game {
 		case Key::RELEASE:
 			break;
 		}
-		return state;
+		return *state;
+	}
+
+	void DeallocWorld() {
+		delete state;
+		return;
 	}
 }

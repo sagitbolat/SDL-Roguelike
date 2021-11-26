@@ -8,7 +8,7 @@ namespace rendering {
 	SDL_Texture* _texture;
 	Uint32* pixels;
 
-	void WorldToPixels(game::WorldState& state);
+	void WorldToPixels(game::WorldState state);
 	int createPixel(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 
 	void rendering::InitRender(const char* title, int x, int y, int w, int h, Uint32 flags) {
@@ -36,7 +36,7 @@ namespace rendering {
 		//std::cout << "Initialized Texture" << std::endl;
 	}
 
-	void DisplayWorld(game::WorldState &state) {
+	void DisplayWorld(game::WorldState state) {
 		WorldToPixels(state);
 
 		SDL_UpdateTexture(_texture, NULL, pixels, SCREEN_WIDTH_720 * sizeof(Uint32));
@@ -55,7 +55,7 @@ namespace rendering {
 		}
 	}
 
-	void WorldToPixels(game::WorldState &state) {
+	void WorldToPixels(game::WorldState state) {
 		for (int x = 0; x < game::MAP_WIDTH; x++) {
 			for (int y = 0; y < game::MAP_HEIGHT; y++) {
 				int pixelColor;

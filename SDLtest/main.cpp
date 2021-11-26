@@ -15,11 +15,16 @@ input::Key lastInput;
 
 
 int SDL_main(int argc, char** argv) {
+    
+    //INIT
     InitEverything();
 
+
+    //GAMELOOP
     GameLoop();
 
-
+    //DEALLOC
+    game::DeallocWorld();
     delete[] rendering::pixels;
     SDL_DestroyTexture(rendering::_texture);
     SDL_DestroyRenderer(rendering::_renderer);

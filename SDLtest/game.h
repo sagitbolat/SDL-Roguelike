@@ -46,4 +46,5 @@ namespace game {
 	void InitGame();
 	//Runs after every input.
 	WorldState GetUpdatedWorld(input::Key input);
+	void DeallocWorld();
 }
