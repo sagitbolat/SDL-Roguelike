@@ -1,5 +1,5 @@
 #include "entities.h"
 
-namespace game {
+namespace entities {
 
 }

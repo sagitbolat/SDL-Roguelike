@@ -1,33 +1,42 @@
 #include "game.h"
+#include "entities.h"
 #include <iostream>
-
-using namespace input;
 
 namespace game {
 
-	WorldState* state = new WorldState;
+	WorldState* state = new WorldState();
 
 	GameState gameState;
 
+	//function declarations
+	void GenerateWorld();
+
 	void InitGame() {
 		gameState = GameState::GAME_MENU;
+		GenerateWorld();
 	}
 
-	WorldState GetUpdatedWorld(Key input) {
+	void GenerateWorld() {
+		//Randomly generate world map
+
+		//Spawn enemies and loot
+	}
+
+	WorldState GetUpdatedWorld(input::Key input) {
 		switch (input) {
-		case Key::W:
+		case input::Key::W:
 			std::cout << "W" << std::endl;
 			break;
-		case Key::A:
+		case input::Key::A:
 			std::cout << "A" << std::endl;
 			break;
-		case Key::S:
+		case input::Key::S:
 			std::cout << "S" << std::endl;
 			break;
-		case Key::D:
+		case input::Key::D:
 			std::cout << "D" << std::endl;
 			break;
-		case Key::RELEASE:
+		case input::Key::RELEASE:
 			break;
 		}
 		return *state;

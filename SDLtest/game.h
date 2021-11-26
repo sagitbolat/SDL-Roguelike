@@ -17,13 +17,33 @@ namespace game {
 		ENEMY = 4
 	};
 
+	enum class BiomeType {
+		GOBLIN_CAVE = 0,
+		ORC_DEN = 1,
+		DRAGON_LAIR = 2,
+	};
+
 	struct Tile {
 		int x;
 		int y;
 		int colorBG;
 		int colorFG;
 		TileType type;
-		Entity currentEntity;
+		BiomeType biome;
+		entities::Entity currentEntity;
+
+		Tile() {
+		}
+
+		Tile(int _x, int _y, int bg, int fg, TileType tp, BiomeType bm, entities::Entity entity) {
+			x = _x;
+			y = _y;
+			colorBG = bg;
+			colorFG = fg;
+			type = tp;
+			biome = bm;
+			currentEntity = entity;
+		}
 	};
 
 	struct WorldState {
