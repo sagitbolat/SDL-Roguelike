@@ -5,7 +5,6 @@ using namespace input;
 
 namespace game {
 
-	
 	WorldState state;
 
 	GameState gameState;

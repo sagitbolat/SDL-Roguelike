@@ -1,5 +1,6 @@
 #pragma once
 #include "inputHandler.h"
+#include "entities.h"
 
 namespace game {
 	/*
@@ -16,8 +17,17 @@ namespace game {
 		ENEMY = 4
 	};
 
+	struct Tile {
+		int x;
+		int y;
+		int colorBG;
+		int colorFG;
+		TileType type;
+		Entity currentEntity;
+	};
+
 	struct WorldState {
-		TileType map[MAP_HEIGHT][MAP_WIDTH];
+		Tile map[MAP_HEIGHT][MAP_WIDTH];
 	};
 
 	/*

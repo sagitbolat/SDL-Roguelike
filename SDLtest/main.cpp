@@ -62,9 +62,9 @@ void GameLoop() {
 
         //Do game logic based on input
         game::WorldState state = game::GetUpdatedWorld(input);
-        //std::cout << "UPDATED WORLD" << std::endl;
         //Render gameworld
         rendering::DisplayWorld(state);
+        //std::cout << "UPDATED WORLD" << std::endl;
         lastInput = input;
 
         timer = clock() - timer;
