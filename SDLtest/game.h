@@ -6,8 +6,8 @@ namespace game {
 	/*
 		Map size constants
 	*/
-	const int MAP_WIDTH = 16;
-	const int MAP_HEIGHT = 8;
+	const int MAP_WIDTH = 160;
+	const int MAP_HEIGHT = 90;
 
 	enum class TileType {
 		EMPTY = 0,
@@ -24,22 +24,16 @@ namespace game {
 	};
 
 	struct Tile {
-		int x;
-		int y;
-		int colorBG;
-		int colorFG;
 		TileType type;
 		BiomeType biome;
 		entities::Entity currentEntity;
 
 		Tile() {
+			type = TileType::EMPTY;
+			biome = BiomeType::GOBLIN_CAVE;
 		}
 
-		Tile(int _x, int _y, int bg, int fg, TileType tp, BiomeType bm, entities::Entity entity) {
-			x = _x;
-			y = _y;
-			colorBG = bg;
-			colorFG = fg;
+		Tile(TileType tp, BiomeType bm, entities::Entity entity) {
 			type = tp;
 			biome = bm;
 			currentEntity = entity;
@@ -47,7 +41,26 @@ namespace game {
 	};
 
 	struct WorldState {
-		Tile map[MAP_HEIGHT][MAP_WIDTH];
+		Tile* map;
+		int width;
+		int height;
+		WorldState(int h, int w) {
+			map = new Tile[h * w];
+			width = w;
+			height = h;
+		}
+
+		Tile GetTile(int x, int y) {
+			return map[y * width + x];
+		}
+		void SetTileType(int x, int y, TileType type) {
+			map[y * width + x].type = type;
+			return;
+		}
+		void SetTileBiome(int x, int y, BiomeType biome) {
+			map[y * width + x].biome = biome;
+			return;
+		}
 	};
 
 	/*
@@ -65,6 +78,6 @@ namespace game {
 	//Runs at the start of the application once.
 	void InitGame();
 	//Runs after every input.
-	WorldState GetUpdatedWorld(input::Key input);
+	WorldState* GetUpdatedWorld(input::Key input);
 	void DeallocWorld();
 }

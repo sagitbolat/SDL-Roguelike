@@ -24,12 +24,14 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="rendering.cpp" />
     <ClCompile Include="entities.cpp" />
+    <ClCompile Include="worldGeneration.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entities.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="inputHandler.h" />
     <ClInclude Include="rendering.h" />
+    <ClInclude Include="worldGeneration.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

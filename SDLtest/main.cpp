@@ -43,7 +43,6 @@ void InitEverything() {
 void GameLoop() {
     clock_t timer; //for measuring loop runtime
     while (game::gameState != game::GameState::GAME_QUIT) {
-        
         timer = clock(); //start timer
 
         //Process input
@@ -66,7 +65,7 @@ void GameLoop() {
 
 
         //Do game logic based on input
-        game::WorldState state = game::GetUpdatedWorld(input);
+        game::WorldState* state = game::GetUpdatedWorld(input);
         //Render gameworld
         rendering::DisplayWorld(state);
         //std::cout << "UPDATED WORLD" << std::endl;

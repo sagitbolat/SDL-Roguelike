@@ -2,7 +2,6 @@
 #include <iostream>
 
 namespace rendering {
-	const int TILE_SIZE = 16;
 	SDL_Window* _window;
 	SDL_Renderer* _renderer;
 	SDL_Texture* _texture;
@@ -10,7 +9,7 @@ namespace rendering {
 
 
 	//Signiture declarations
-	void WorldToPixels(game::WorldState state);
+	void WorldToPixels(game::WorldState* state);
 	int createPixel(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 
 
@@ -40,7 +39,7 @@ namespace rendering {
 		//std::cout << "Initialized Texture" << std::endl;
 	}
 
-	void DisplayWorld(game::WorldState state) {
+	void DisplayWorld(game::WorldState* state) {
 		WorldToPixels(state);
 
 		SDL_UpdateTexture(_texture, NULL, pixels, SCREEN_WIDTH_720 * sizeof(Uint32));
@@ -59,12 +58,24 @@ namespace rendering {
 		}
 	}
 
-	void WorldToPixels(game::WorldState state) {
+	void WorldToPixels(game::WorldState* state) {
 		for (int x = 0; x < game::MAP_WIDTH; x++) {
 			for (int y = 0; y < game::MAP_HEIGHT; y++) {
-				int pixelColor;
-				if ((x % 2 == 0 && y % 2 == 0) || (x % 2 == 1 && y % 2 == 1)) pixelColor = createPixel(250, 232, 224, 255);
-				else pixelColor = createPixel(239, 124, 142, 255);
+				int pixelColor = createPixel(255, 255, 255, 255);
+				//if ((x % 2 == 0 && y % 2 == 0) || (x % 2 == 1 && y % 2 == 1)) pixelColor = createPixel(250, 232, 224, 255);
+				//else pixelColor = createPixel(239, 124, 142, 255);
+				switch ((*state).GetTile(x, y).type)
+				{
+				case game::TileType::FLOOR:
+					pixelColor = createPixel(250, 232, 224, 255);
+					break;
+				case game::TileType::WALL:
+					pixelColor = createPixel(239, 124, 142, 255);
+					break;
+				default:
+					pixelColor = createPixel(0, 0, 0, 255);
+					break;
+				}
 				SetPixelsToColor(x * TILE_SIZE, y * TILE_SIZE, (x + 1) * TILE_SIZE, (y + 1) * TILE_SIZE, pixelColor);
 			}
 		}
