@@ -40,6 +40,6 @@ namespace game {
 	}
 
 	void SpawnPlayer(int x, int y, WorldState* state) {
-		(*state).SetTileEntity(x, y, entities::Entities::PLAYER);
+		(*state).SetTileEntity(x, y, &*entities::player);
 	}
 }

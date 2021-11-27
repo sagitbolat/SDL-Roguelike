@@ -28,17 +28,24 @@ namespace game {
 		TileType type;
 		BiomeType biome;
 		entities::Entities currentEntity;
+		entities::Entity* currEntity;
 
 		Tile() {
 			type = TileType::EMPTY;
 			biome = BiomeType::GOBLIN_CAVE;
 			currentEntity = entities::Entities::NONE;
+			currEntity = NULL;
 		}
 
 		Tile(TileType tp, BiomeType bm, entities::Entities entity) {
 			type = tp;
 			biome = bm;
 			currentEntity = entity;
+			currEntity = NULL;
+		}
+
+		void SetEntity(entities::Entity*& entity) {
+			currEntity = entity;
 		}
 	};
 
@@ -63,8 +70,8 @@ namespace game {
 			map[y * width + x].biome = biome;
 			return;
 		}
-		void SetTileEntity(int x, int y, entities::Entities entity) {
-			map[y * width + x].currentEntity = entity;
+		void SetTileEntity(int x, int y, entities::Entity* entity) {
+			map[y * width + x].SetEntity(entity);
 			return;
 		}
 	};
