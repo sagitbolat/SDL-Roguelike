@@ -38,6 +38,7 @@ namespace game {
 	}
 
 	void DeallocWorld() {
+		delete entities::player;
 		delete[] state->map;
 		delete state;
 		return;

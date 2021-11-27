@@ -1,13 +1,14 @@
 #pragma once
 #include "inputHandler.h"
 #include "entities.h"
+#include <iostream>
 
 namespace game {
 	/*
 		Map size constants
 	*/
-	const int MAP_WIDTH = 160;
-	const int MAP_HEIGHT = 90;
+	const int MAP_WIDTH = 80;
+	const int MAP_HEIGHT = 45;
 
 	enum class TileType {
 		EMPTY = 0,
@@ -26,14 +27,15 @@ namespace game {
 	struct Tile {
 		TileType type;
 		BiomeType biome;
-		entities::Entity currentEntity;
+		entities::Entities currentEntity;
 
 		Tile() {
 			type = TileType::EMPTY;
 			biome = BiomeType::GOBLIN_CAVE;
+			currentEntity = entities::Entities::NONE;
 		}
 
-		Tile(TileType tp, BiomeType bm, entities::Entity entity) {
+		Tile(TileType tp, BiomeType bm, entities::Entities entity) {
 			type = tp;
 			biome = bm;
 			currentEntity = entity;
@@ -59,6 +61,10 @@ namespace game {
 		}
 		void SetTileBiome(int x, int y, BiomeType biome) {
 			map[y * width + x].biome = biome;
+			return;
+		}
+		void SetTileEntity(int x, int y, entities::Entities entity) {
+			map[y * width + x].currentEntity = entity;
 			return;
 		}
 	};

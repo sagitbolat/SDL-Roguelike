@@ -1,5 +1,6 @@
 #pragma once
 namespace entities {
+	///NEEDS REFACTORING
 
 	/*
 		Entity component:
@@ -32,21 +33,33 @@ namespace entities {
 
 
 	//Player Entity
-	struct Player : HealthEntity, AttackEntity, StaminaEntity, ManaEntity {
+	struct Player : Entity {
 	public:
-		Player(int mana, int health) {
-			maxMana = mana;
-			maxHealth = health;
+		HealthEntity healthComponent; 
+		ManaEntity manaComponent;
+		StaminaEntity staminaComponent;
+		AttackEntity attackComponent; 
+		Player(int health, int mana, int stamina, int attack) {
+			healthComponent.maxHealth = health;
+			manaComponent.maxMana = mana;
+			staminaComponent.maxStamina = stamina;
+			attackComponent.attack = attack;
+
 		}
 	};
 
-	struct Goblin : HealthEntity, AttackEntity, StaminaEntity, EnemyEntity {
-		Goblin(int health, int attack, int stamina, int reward) {
-			maxHealth = health;
-			currentHealth = health;
-			maxStamina = stamina;
-			currentStamina = stamina;
-			goldReward = reward;
-		}
+	struct Goblin : Entity {
 	};
+
+	enum class Entities {
+		NONE = 0,
+		PLAYER = 1,
+		ENEMY = 2,
+		NPC = 3,
+		LOOT = 4,
+		ITEM = 5
+	};
+
+	extern Player* player;
+	void InitPlayer();
 }

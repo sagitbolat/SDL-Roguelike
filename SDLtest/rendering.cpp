@@ -76,6 +76,12 @@ namespace rendering {
 					pixelColor = createPixel(0, 0, 0, 255);
 					break;
 				}
+
+				if ((*state).GetTile(x, y).currentEntity == entities::Entities::PLAYER) {
+					std::cout << "Found Player" << std::endl;
+					pixelColor = createPixel(255, 0, 0, 255);
+				}
+
 				SetPixelsToColor(x * TILE_SIZE, y * TILE_SIZE, (x + 1) * TILE_SIZE, (y + 1) * TILE_SIZE, pixelColor);
 			}
 		}
