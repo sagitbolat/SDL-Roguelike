@@ -2,5 +2,5 @@
 #include "game.h"
 
 namespace game {
-	void GenerateWorld(WorldState* state);
+	void GenerateWorld(worldState::Tile* state);
 }

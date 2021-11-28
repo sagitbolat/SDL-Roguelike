@@ -9,7 +9,7 @@ namespace rendering {
 
 
 	//Signiture declarations
-	void WorldToPixels(game::WorldState* state);
+	void WorldToPixels();
 	int createPixel(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 
 
@@ -39,8 +39,8 @@ namespace rendering {
 		//std::cout << "Initialized Texture" << std::endl;
 	}
 
-	void DisplayWorld(game::WorldState* state) {
-		WorldToPixels(state);
+	void DisplayWorld() {
+		WorldToPixels();
 
 		SDL_UpdateTexture(_texture, NULL, pixels, SCREEN_WIDTH_720 * sizeof(Uint32));
 		//std::cout << "Updated Texture" << std::endl;
@@ -58,14 +58,13 @@ namespace rendering {
 		}
 	}
 
-	void WorldToPixels(game::WorldState* state) {
+	void WorldToPixels() {
 		for (int x = 0; x < game::MAP_WIDTH; x++) {
 			for (int y = 0; y < game::MAP_HEIGHT; y++) {
 				int pixelColor = createPixel(255, 255, 255, 255);
 				//if ((x % 2 == 0 && y % 2 == 0) || (x % 2 == 1 && y % 2 == 1)) pixelColor = createPixel(250, 232, 224, 255);
 				//else pixelColor = createPixel(239, 124, 142, 255);
-				switch ((*state).GetTile(x, y).type)
-				{
+				switch (worldState::GetTileType(x, y)) {
 				case game::TileType::FLOOR:
 					pixelColor = createPixel(250, 232, 224, 255);
 					break;
@@ -77,7 +76,7 @@ namespace rendering {
 					break;
 				}
 
-				if ((*state).GetTile(x, y).currEntity == entities::player) {
+				if (worldState::GetTile(x, y).currEntity == entities::player) {
 					std::cout << "Found Player" << std::endl;
 					pixelColor = createPixel(255, 0, 0, 255);
 				}

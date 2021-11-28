@@ -14,7 +14,7 @@ input::Key GetInput();
 input::Key lastInput;
 
 
-int SDL_main(int argc, char** argv) {
+int main(int argc, char** argv) {
     
     //INIT
     InitEverything();
@@ -65,9 +65,9 @@ void GameLoop() {
 
 
         //Do game logic based on input
-        game::WorldState* state = game::GetUpdatedWorld(input);
+        game::UpdateWorld(input);
         //Render gameworld
-        rendering::DisplayWorld(state);
+        rendering::DisplayWorld();
         //std::cout << "UPDATED WORLD" << std::endl;
         lastInput = input;
 

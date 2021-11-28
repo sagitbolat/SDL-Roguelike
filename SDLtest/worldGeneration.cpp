@@ -1,12 +1,13 @@
 #include "worldGeneration.h"
+#include "worldState.h"
 
 #include <iostream>
 
 namespace game {
 
-	void SpawnPlayer(int x, int y, WorldState* state);
+	void SpawnPlayer(int x, int y);
 
-	void GenerateWorld(WorldState* state) {
+	void GenerateWorld(worldState::Tile* tileMap) {
 		//Randomly generate world map
 		int wallThickness = 1;
 		for (int x = 0; x < MAP_WIDTH; x++) {
@@ -26,20 +27,20 @@ namespace game {
 				}*/
 				if ((x >= wallThickness && x < MAP_WIDTH - wallThickness) 
 					&& (y >= wallThickness && y < MAP_HEIGHT - wallThickness)) {
-					(*state).SetTileType(x, y, TileType::FLOOR);
+					worldState::SetTileType(x, y, TileType::FLOOR);
 				}
-				else { (*state).SetTileType(x, y, TileType::WALL); }
+				else { worldState::SetTileType(x, y, TileType::WALL); }
 			}
 		}
 
 		//Spawn Player
 		entities::InitPlayer();
-		SpawnPlayer((int)MAP_WIDTH/2, (int)MAP_HEIGHT / 2, state);
+		SpawnPlayer((int)MAP_WIDTH/2, (int)MAP_HEIGHT / 2);
 
 		//Spawn enemies and loot
 	}
 
-	void SpawnPlayer(int x, int y, WorldState* state) {
-		(*state).SetTileEntity(x, y, &*entities::player);
+	void SpawnPlayer(int x, int y) {
+		worldState::SetTileEntity(x, y, &*entities::player);
 	}
 }

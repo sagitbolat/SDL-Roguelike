@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 #include "game.h"
+
 namespace rendering {
 	extern SDL_Window* _window;
 	extern SDL_Renderer* _renderer;
@@ -16,5 +17,5 @@ namespace rendering {
 
 
 	void InitRender(const char* title, int x, int y, int w, int h, Uint32 flags);
-	void DisplayWorld(game::WorldState* state);
+	void DisplayWorld();
 }

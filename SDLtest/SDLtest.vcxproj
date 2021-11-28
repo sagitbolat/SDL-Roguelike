@@ -25,6 +25,7 @@
     <ClCompile Include="rendering.cpp" />
     <ClCompile Include="entities.cpp" />
     <ClCompile Include="worldGeneration.cpp" />
+    <ClCompile Include="worldState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entities.h" />
@@ -32,6 +33,7 @@
     <ClInclude Include="inputHandler.h" />
     <ClInclude Include="rendering.h" />
     <ClInclude Include="worldGeneration.h" />
+    <ClInclude Include="worldState.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
