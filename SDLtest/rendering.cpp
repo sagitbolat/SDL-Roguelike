@@ -1,4 +1,5 @@
 #include "rendering.h"
+#include "worldState.h"
 #include <iostream>
 
 namespace rendering {
@@ -64,11 +65,11 @@ namespace rendering {
 				int pixelColor = createPixel(255, 255, 255, 255);
 				//if ((x % 2 == 0 && y % 2 == 0) || (x % 2 == 1 && y % 2 == 1)) pixelColor = createPixel(250, 232, 224, 255);
 				//else pixelColor = createPixel(239, 124, 142, 255);
-				switch (worldState::GetTileType(x, y)) {
-				case game::TileType::FLOOR:
+				switch (game::worldState::GetTileType(x, y)) {
+				case game::worldState::TileType::FLOOR:
 					pixelColor = createPixel(250, 232, 224, 255);
 					break;
-				case game::TileType::WALL:
+				case game::worldState::TileType::WALL:
 					pixelColor = createPixel(239, 124, 142, 255);
 					break;
 				default:
@@ -76,7 +77,7 @@ namespace rendering {
 					break;
 				}
 
-				if (worldState::GetTile(x, y).currEntity == entities::player) {
+				if (game::worldState::GetCurrentEntity(x, y) == entities::player) {
 					std::cout << "Found Player" << std::endl;
 					pixelColor = createPixel(255, 0, 0, 255);
 				}

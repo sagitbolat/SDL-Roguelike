@@ -11,20 +11,6 @@ namespace game {
 	const int MAP_WIDTH = 80;
 	const int MAP_HEIGHT = 45;
 
-	enum class TileType {
-		EMPTY = 0,
-		FLOOR = 1,
-		WALL = 2,
-		CHARACTER = 3,
-		ENEMY = 4
-	};
-
-	enum class BiomeType {
-		GOBLIN_CAVE = 0,
-		ORC_DEN = 1,
-		DRAGON_LAIR = 2,
-	};
-
 	/*
 		Enum that represents gamestate
 	*/

@@ -27,9 +27,9 @@ namespace game {
 				}*/
 				if ((x >= wallThickness && x < MAP_WIDTH - wallThickness) 
 					&& (y >= wallThickness && y < MAP_HEIGHT - wallThickness)) {
-					worldState::SetTileType(x, y, TileType::FLOOR);
+					worldState::SetTileType(x, y, worldState::TileType::FLOOR);
 				}
-				else { worldState::SetTileType(x, y, TileType::WALL); }
+				else { worldState::SetTileType(x, y, worldState::TileType::WALL); }
 			}
 		}
 
