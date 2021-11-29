@@ -1,6 +1,6 @@
 #pragma once
-#include "game.h"
+#include "worldState.h"
 
 namespace game {
-	void GenerateWorld(worldState::Tile* state);
+	void GenerateWorld(worldState::Tile* state, int width, int height);
 }

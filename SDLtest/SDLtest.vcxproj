@@ -32,6 +32,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="inputHandler.h" />
     <ClInclude Include="rendering.h" />
+    <ClInclude Include="utils.h" />
     <ClInclude Include="worldGeneration.h" />
     <ClInclude Include="worldState.h" />
   </ItemGroup>

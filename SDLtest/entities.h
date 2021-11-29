@@ -44,21 +44,20 @@ namespace entities {
 			manaComponent.maxMana = mana;
 			staminaComponent.maxStamina = stamina;
 			attackComponent.attack = attack;
-
 		}
 	};
 
-	struct Goblin : Entity {
+	struct Enemy : Entity {
 	};
 
-	enum class Entities {
-		NONE = 0,
-		PLAYER = 1,
-		ENEMY = 2,
-		NPC = 3,
-		LOOT = 4,
-		ITEM = 5
-	};
+	//enum class Entities {
+	//	NONE = 0,
+	//	PLAYER = 1,
+	//	ENEMY = 2,
+	//	NPC = 3,
+	//	LOOT = 4,
+	//	ITEM = 5
+	//};
 
 	extern Player* player;
 	void InitPlayer();

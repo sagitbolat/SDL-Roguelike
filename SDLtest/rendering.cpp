@@ -78,7 +78,7 @@ namespace rendering {
 				}
 
 				if (game::worldState::GetCurrentEntity(x, y) == entities::player) {
-					std::cout << "Found Player" << std::endl;
+					//std::cout << "Found Player" << std::endl;
 					pixelColor = createPixel(255, 0, 0, 255);
 				}
 

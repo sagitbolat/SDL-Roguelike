@@ -1,5 +1,6 @@
 #pragma once
 #include "entities.h"
+#include "utils.h"
 
 
 namespace game {
@@ -29,6 +30,8 @@ namespace game {
 		void SetTileType(int x, int y, TileType type);
 		void SetTileBiome(int x, int y, BiomeType biome);
 		void SetTileEntity(int x, int y, entities::Entity* entity);
+		void MovePlayer(int x, int y);
+		void MovePlayer(utils::Direction direction);
 		Tile* GetMap();
 		void DeallocMap();
 	}
