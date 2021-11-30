@@ -18,7 +18,7 @@ namespace game {
 		GenerateWorld(worldState::GetMap(), MAP_WIDTH, MAP_HEIGHT);
 	}
 
-	void UpdateWorld(input::Key input) {
+	void HandleInput(input::Key input) {
 		switch (input) {
 		case input::Key::W:
 			std::cout << "W" << std::endl;

@@ -50,22 +50,22 @@ void GameLoop() {
 
         //THE CONTINUE BLOCK IS MEANT TO ENSURE THAT KEY EVENTS ARE ONLY FIRED ONCE PER KEYPRESS.
 
-        //if Key is unknown, skip the rest of the loop
-        if (input == input::Key::UNKNOWN) continue;
-        //if Keystate did not change, skip rest of the loop
-        if (input == lastInput) continue;
+        //if Key is not unknown or if Keystate changed, Handle game input.
+        if (input != lastInput && input != input::Key::UNKNOWN) {
+            //Do game logic based on input
+            game::HandleInput(input);
+        }
         //if Keystate is Key Released, update input and continue
         if (input == input::Key::RELEASE) {
             lastInput = input;
-            continue;
         } else if (input == input::Key::QUIT) {
             game::gameState = game::GameState::GAME_QUIT;
-            continue;
+            break; //quit out of gameloop
         }
 
+        //Update gameworld with any passive processes
+        //game::UpdateWorld();
 
-        //Do game logic based on input
-        game::UpdateWorld(input);
         //Render gameworld
         rendering::DisplayWorld();
         //std::cout << "UPDATED WORLD" << std::endl;

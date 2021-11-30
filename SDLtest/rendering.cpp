@@ -8,12 +8,9 @@ namespace rendering {
 	SDL_Texture* _texture;
 	Uint32* pixels;
 
-
 	//Signiture declarations
 	void WorldToPixels();
 	int createPixel(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
-
-
 
 	void rendering::InitRender(const char* title, int x, int y, int w, int h, Uint32 flags) {
 		SDL_Init(SDL_INIT_EVERYTHING);

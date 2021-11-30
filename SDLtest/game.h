@@ -26,6 +26,6 @@ namespace game {
 	//Runs at the start of the application once.
 	void InitGame();
 	//Runs after every input.
-	void UpdateWorld(input::Key input);
+	void HandleInput(input::Key input);
 	void DeallocWorld();
 }

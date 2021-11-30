@@ -94,6 +94,7 @@ namespace game {
 				MovePlayer(x + 1, y);
 				break;
 			}
+			// update enemy positions.
 		}
 		Tile* GetMap() {
 			return map;
