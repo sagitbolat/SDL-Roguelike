@@ -14,8 +14,6 @@ namespace game {
 			EMPTY = 0,
 			FLOOR = 1,
 			WALL = 2,
-			CHARACTER = 3,
-			ENEMY = 4
 		};
 
 		enum class BiomeType {

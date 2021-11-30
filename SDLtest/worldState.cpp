@@ -9,6 +9,9 @@ namespace game {
 		utils::Vector2 playerPos;
 		utils::Direction playerDirection;
 
+		//method declaration
+		bool isTileWalkable(TileType type);
+
 		struct Tile {
 			TileType type;
 			BiomeType biome;
@@ -56,6 +59,10 @@ namespace game {
 
 		//THIS METHOD PRESERVES PLAYER DIRECTION
 		void MovePlayer(int x, int y) {
+
+			//if trying to move into a wall, return out of the method
+			if (!isTileWalkable(map[y * width + x].type)) return;
+
 			std::cout << "Player moved from " << playerPos.x << ", " << playerPos.y << " to " << x << ", " << y << std::endl;
 			
 			//check if move ends up in the bounds of the map
@@ -96,12 +103,19 @@ namespace game {
 			}
 			// update enemy positions.
 		}
+		bool isTileWalkable(TileType type) {
+			if (type == TileType::WALL || type == TileType::EMPTY) {
+				return false;
+			}
+			return true;
+		}
+		
 		Tile* GetMap() {
 			return map;
 		}
+
 		void DeallocMap() {
 			delete[] map;
 		}
-
 	}
 }

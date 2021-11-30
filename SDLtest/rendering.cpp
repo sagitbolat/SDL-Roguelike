@@ -56,7 +56,7 @@ namespace rendering {
 		}
 	}
 
-	void WorldToPixels() {
+	void WorldToPixels() { //NEEDS REFACTORING
 		for (int x = 0; x < game::MAP_WIDTH; x++) {
 			for (int y = 0; y < game::MAP_HEIGHT; y++) {
 				int pixelColor = createPixel(255, 255, 255, 255);

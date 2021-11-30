@@ -4,8 +4,6 @@
 
 namespace game {
 
-	void SpawnPlayer(int x, int y);
-
 	void GenerateWorld(worldState::Tile* tileMap, int width, int height) {
 		//Randomly generate world map
 		int wallThickness = 1;
@@ -27,7 +25,7 @@ namespace game {
 		//Spawn enemies and loot
 	}
 
-	/*void SpawnPlayer(int x, int y) {
-		worldState::SetTileEntity(x, y, &*entities::player);
-	}*/
+	void BSPtree(int width, int height) {
+
+	}
 }

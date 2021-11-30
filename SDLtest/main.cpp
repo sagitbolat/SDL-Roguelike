@@ -5,7 +5,9 @@
 #include <iostream>
 #include <ctime>
 
+const double KEY_REPEAT_RATE = 0.1;
 
+const Uint8* keyboardState = SDL_GetKeyboardState(NULL);
 const char* TITLE = "Game";
 void InitEverything();
 void GameLoop();
@@ -42,14 +44,22 @@ void InitEverything() {
 
 void GameLoop() {
     clock_t timer; //for measuring loop runtime
+    clock_t timeofLastKeyRepitition = clock();
+
     while (game::gameState != game::GameState::GAME_QUIT) {
         timer = clock(); //start timer
+
+        bool isShiftPressed = keyboardState[SDL_SCANCODE_LSHIFT]; //checks whether shift is pressed down
 
         //Process input
         input::Key input = GetInput();
 
-        //THE CONTINUE BLOCK IS MEANT TO ENSURE THAT KEY EVENTS ARE ONLY FIRED ONCE PER KEYPRESS.
-
+        double timeSinceLastKeyRepitition = (double)((double)clock() - timeofLastKeyRepitition)/ CLOCKS_PER_SEC;
+        //if shift is pressed and some time has passed from previous fire of this if block, Handle game input.
+        if (isShiftPressed && timeSinceLastKeyRepitition > KEY_REPEAT_RATE) {
+            game::HandleInput(input);
+            timeofLastKeyRepitition = clock();
+        }
         //if Key is not unknown or if Keystate changed, Handle game input.
         if (input != lastInput && input != input::Key::UNKNOWN) {
             //Do game logic based on input
@@ -72,7 +82,7 @@ void GameLoop() {
         lastInput = input;
 
         timer = clock() - timer;
-        std::cout << "One game loop took: " << (double)timer/CLOCKS_PER_SEC << " seconds" << std::endl;
+        //std::cout << "One game loop took: " << (double)timer/CLOCKS_PER_SEC << " seconds" << std::endl;
     }
 }
 
