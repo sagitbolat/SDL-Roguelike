@@ -1,5 +1,12 @@
 #pragma once
 namespace entities {
+
+	const int PLAYER_HEALTH = 10;
+	const int PLAYER_MANA = 10;
+	const int PLAYER_STAMINA = 10;
+	const int PLAYER_ATTACK = 4;
+
+
 	///NEEDS REFACTORING
 
 	/*
