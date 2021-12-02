@@ -15,4 +15,7 @@ namespace utils {
 		LEFT = 2,
 		RIGHT = 4
 	};
+
+	double EulerDistance(Vector2 a, Vector2 b);
+	int ManhattanDistance(Vector2 a, Vector2 b);
 }

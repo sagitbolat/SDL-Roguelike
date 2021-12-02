@@ -24,6 +24,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="rendering.cpp" />
     <ClCompile Include="entities.cpp" />
+    <ClCompile Include="utils.cpp" />
     <ClCompile Include="worldGeneration.cpp" />
     <ClCompile Include="worldState.cpp" />
   </ItemGroup>

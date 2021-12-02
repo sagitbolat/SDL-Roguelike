@@ -6,7 +6,7 @@
 #include <cmath> 
 
 namespace game {
-	const long WORLD_SEED = 33213;
+	const long WORLD_SEED = 123312;
 
 	namespace BSP {
 		const int SMALLEST_PARTITION_SIZE = 10;
@@ -146,8 +146,90 @@ namespace game {
 		}
 	}
 
-	namespace RandomRoomPlacement {
+	namespace RoomPlacement {
+		//MIN AND MAX Axis Size of a room
+		const int ROOM_MAX_SIZE = 10;
+		const int ROOM_MIN_SIZE = 6;
+		const int NUMBER_OF_ROOMS = 30;
+		const int CHANCE_TO_DRAW_HALLWAY = 10; //out of 100. 50 = 50%
+		std::vector<utils::Vector2> GenerateRoomLocations(int width, int height) {
+			//select random positions for rooms.
+			std::vector<utils::Vector2> positions(NUMBER_OF_ROOMS);
+			for (int i = 0; i < NUMBER_OF_ROOMS; i++) {
+				utils::Vector2 position;
+				double minDistane = 2000;
+				int iters = 0;
+				do {
+					int x = rand() % (width - ROOM_MAX_SIZE) + (ROOM_MAX_SIZE / 2);
+					int y = rand() % (height - ROOM_MAX_SIZE) + (ROOM_MAX_SIZE / 2);
+					position.x = x;
+					position.y = y;
+					for (int j = 0; j < NUMBER_OF_ROOMS; j++) {
+						double distance = utils::ManhattanDistance(position, positions[i]);
+						minDistane = std::fmin(distance, minDistane);
+					}
+					iters += 1;
+				} while (minDistane < ROOM_MAX_SIZE && iters < 1000);
+				//if too close to an existing room, repeat previous steps
+				positions[i] = position;
+			}
+			//return positions
+			return positions;
+		}
+		//expand the room out to a random size between the min and max size.
+		void CreateRooms(std::vector<utils::Vector2> positions) {
+			for (int i = 0; i < NUMBER_OF_ROOMS; i++) {
+				//generate the size of the room
+				int x = positions[i].x;
+				int y = positions[i].y;
+				int xsize = rand() % (ROOM_MAX_SIZE - ROOM_MIN_SIZE) + ROOM_MIN_SIZE;
+				int ysize = rand() % (ROOM_MAX_SIZE - ROOM_MIN_SIZE) + ROOM_MIN_SIZE;
 
+				//set to floor tiles
+				for (int i = x - (xsize / 2); i < x + (xsize / 2); i++) {
+					for (int j = y - (ysize / 2); j < y + (ysize / 2); j++) {
+						worldState::SetTileType(i, j, worldState::TileType::FLOOR);
+					}
+				}
+
+			}
+		}
+		//draw hallways between the room positions.
+		void CreateHallways(std::vector<utils::Vector2> positions) {
+			for (int i = 0; i < NUMBER_OF_ROOMS; i++) {
+				for (int j = 0; j < NUMBER_OF_ROOMS; j++) {
+					if (j == i) continue;
+					int randomInt = rand() % 100;
+					if (randomInt > CHANCE_TO_DRAW_HALLWAY && i != j+1) continue;
+					int minx = std::fmin(positions[i].x, positions[j].x);
+					int maxx = std::fmax(positions[i].x, positions[j].x);
+					int miny = std::fmin(positions[i].y, positions[j].y);
+					int maxy = std::fmax(positions[i].y, positions[j].y);
+
+					for (int x = minx; x < maxx; x++) {
+						int minOrMax = rand() % 2;
+						int y;
+						if (minOrMax == 1) y = maxy;
+						else y = miny;
+						worldState::SetTileType(x, maxy, worldState::TileType::FLOOR);
+					}
+					for (int y = miny; y < maxy; y++) {
+						int minOrMax = rand() % 2;
+						int x;
+						if (minOrMax == 1) x = maxx;
+						else x = minx;
+						worldState::SetTileType(minx, y, worldState::TileType::FLOOR);
+					}
+				}
+			}
+		}
+
+		utils::Vector2 GenerateAlgorithm(int width, int height) {
+			std::vector<utils::Vector2> positions = GenerateRoomLocations(width, height);
+			CreateRooms(positions);
+			CreateHallways(positions);
+			return positions[0];
+		}
 	}
 
 	void GenerateWorld(worldState::Tile* tileMap, int width, int height) {
@@ -166,11 +248,12 @@ namespace game {
 				worldState::SetTileType(x, y, worldState::TileType::WALL);
 			}
 		}
-		BSP::BSPtree(width, height);
+		//BSP::BSPtree(width, height);
+		utils::Vector2 playerSpawn = RoomPlacement::GenerateAlgorithm(width, height);
 
 		//Spawn Player
 		entities::InitPlayer();
-		worldState::MovePlayer((int)width / 2, (int)height / 2);
+		worldState::MovePlayer(playerSpawn.x, playerSpawn.y);
 
 		//Spawn enemies and loot
 	}
