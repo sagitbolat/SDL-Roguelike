@@ -6,9 +6,10 @@
 #include <cmath> 
 
 namespace game {
-	const long WORLD_SEED = 3838291;
+	const long WORLD_SEED = 33213;
 
 	namespace BSP {
+		const int SMALLEST_PARTITION_SIZE = 10;
 		struct TreeNode {
 			int maxX = 0;
 			int maxY = 0;
@@ -33,15 +34,23 @@ namespace game {
 				delete right;
 				right = tn;
 			}
+			int GetSmallerAxis() {
+				int width = std::abs(maxX - minX);
+				int height = std::abs(maxY- minY);
+				if (width > height) return height;
+				else return width;
+			}
 			bool IsLeaf() {
 				return (left == NULL && right == NULL);
+			}
+			void PrintString() {
+				std::cout << "Room x: (" << minX << ", " << maxX << ") y: (" << minY << ", " << maxY << ")" << std::endl;
 			}
 			~TreeNode() {
 				delete left;
 				delete right;
 			}
 		};
-		const int SMALLEST_PARTITION_SIZE = 10;
 		void PartitionOnce(TreeNode* node);
 		void PartitionNode(TreeNode* node);
 		void SpawnRoom(TreeNode* node);
@@ -51,15 +60,25 @@ namespace game {
 			//create additional tree nodes recursively with a helper function
 			//PartitionNode(dungeon, 4);
 			PartitionNode(dungeon);
-			std::cout << dungeon->right->IsLeaf() << dungeon->left->IsLeaf() << std::endl;
+			std::cout << dungeon->right->left->IsLeaf() << dungeon->left->left->IsLeaf() << std::endl;
 			//traverse tree and spawn a room inside the limits of each leaf node
 			SpawnRoom(dungeon);
+			
+			dungeon->PrintString();
+			dungeon->left->PrintString();
+			dungeon->right->PrintString();
+			dungeon->left->left->PrintString();
+			dungeon->left->right->PrintString();
+			dungeon->right->left->PrintString();
+			dungeon->right->right->PrintString();
+			
 			//connect all sister nodes with a hallway.
 
 			//at the end delete dungeon
 			delete dungeon;
 		}
 		void PartitionOnce(TreeNode* node) {
+			if (node == NULL) return;
 			int axis = rand() % 2;
 			int rangeX = std::abs(node->maxX - node->minX);
 			int rangeY = std::abs(node->maxY - node->minY);
@@ -73,27 +92,40 @@ namespace game {
 			TreeNode* left = NULL;
 			TreeNode* right = NULL;
 			if (axis == 0) {
-				left = new TreeNode(node->minX + value - 1, node->maxY, node->minX, node->minY);
-				right = new TreeNode(node->maxX, node->maxY, node->minX + value + 1, node->minY);
+				left = new TreeNode(node->minX + value, node->maxY, node->minX, node->minY);
+				right = new TreeNode(node->maxX, node->maxY, node->minX + value, node->minY);
 			}
 			else {
-				left = new TreeNode(node->maxX, node->minY + value - 1, node->minX, node->minY);
-				right = new TreeNode(node->maxX, node->maxY, node->minX, node->minY + value + 1);
+				left = new TreeNode(node->maxX, node->minY + value, node->minX, node->minY);
+				right = new TreeNode(node->maxX, node->maxY, node->minX, node->minY + value);
 			}
-			std::cout << "Partitioning" << std::endl;
-			(*node).AddLeft(left);
-			(*node).AddRight(right);
+			node->AddLeft(left);
+			node->AddRight(right);
 		}
 		void PartitionNode(TreeNode* node) {
 			PartitionOnce(node);
-			PartitionOnce((*node).left);
-			PartitionOnce((*node).right);
+			PartitionOnce(node->left);
+			PartitionOnce(node->right);
+			PartitionOnce(node->left->left);
+			PartitionOnce(node->left->right);
+			PartitionOnce(node->right->left);
+			PartitionOnce(node->right->right);
+			/*if (node->GetSmallerAxis() < SMALLEST_PARTITION_SIZE) return;
+			if (node == NULL) return;
+			std::cout << "Partitioning" << std::endl;
+			PartitionOnce(node);
+			if (node->left != NULL) {
+				PartitionNode(node->left);
+			}
+			if (node->right != NULL) {
+				PartitionNode(node->right);
+			}*/
 		}
 		void SpawnRoom(TreeNode* node) {
-			int paddingLeft = rand() % 3 + 2;
-			int paddingRight = rand() % 3 + 2;
-			int paddingUp = rand() % 3 + 1;
-			int paddingDown = rand() % 3 + 1;
+			int paddingLeft = rand() % 5 + 1;
+			int paddingRight = rand() % 5 + 1;
+			int paddingUp = rand() % 5 + 1;
+			int paddingDown = rand() % 5 + 1;
 			if (node == NULL) return;
 			else if (node->IsLeaf()) {
 				int minX = node->minX + paddingLeft;
@@ -107,11 +139,15 @@ namespace game {
 				}
 			}
 			else {
-				SpawnRoom((*node).left);
-				SpawnRoom((*node).right);
+				SpawnRoom(node->left);
+				SpawnRoom(node->right);
 			}
 
 		}
+	}
+
+	namespace RandomRoomPlacement {
+
 	}
 
 	void GenerateWorld(worldState::Tile* tileMap, int width, int height) {

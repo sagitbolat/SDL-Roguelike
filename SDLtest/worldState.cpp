@@ -45,6 +45,7 @@ namespace game {
 		}
 		
 		void SetTileType(int x, int y, TileType type) {
+			//if (x < 0 || y < 0 || x >= width || y >= height) return;
 			map[y * width + x].type = type;
 			return;
 		}
