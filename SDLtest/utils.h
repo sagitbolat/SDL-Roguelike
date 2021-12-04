@@ -8,6 +8,10 @@ namespace utils {
 			x = 0;
 			y = 0;
 		}
+		Vector2(int x_, int y_) {
+			x = x_;
+			y = y_;
+		}
 	};
 	enum class Direction {
 		UP = 0,

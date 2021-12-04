@@ -3,147 +3,88 @@
 
 #include <iostream>
 #include <vector>
-#include <cmath> 
+#include <cmath>
 
 namespace game {
 	const long WORLD_SEED = 123312;
 
 	namespace BSP {
-		const int SMALLEST_PARTITION_SIZE = 10;
-		struct TreeNode {
-			int maxX = 0;
-			int maxY = 0;
-			int minX = 0;
-			int minY = 0;
-			TreeNode* left;
-			TreeNode* right;
+		const int MIN_ROOM_AREA = 100;
 
-			TreeNode(int max_x, int max_y, int min_x, int min_y) {
-				maxX = max_x;
-				maxY = max_y;
-				minX = min_x;
-				minY = min_y;
-				left = NULL;
-				right = NULL;
+		struct BSPNode {
+			int width;
+			int height;
+			int x; 
+			int y;
+			bool axis; // true is X, false is Y
+			BSPNode* n1;
+			BSPNode* n2;
+			BSPNode(int w, int h, int _x, int _y,bool _axis, BSPNode* _n1, BSPNode* _n2) {
+				width = w;
+				height = h;
+				x = _x;
+				y = _y;
+				n1 = _n1;
+				n2 = _n2;
+				axis = _axis;
 			}
-			void AddLeft(TreeNode* tn) {
-				delete left;
-				left = tn;
+			std::vector<utils::Vector2> GetCorners(){
+				std::vector<utils::Vector2> corners(4);
+				corners[0] = utils::Vector2(x, y);
+				corners[1] = utils::Vector2(x+width, y);
+				corners[2] = utils::Vector2(x, y+height);
+				corners[3] = utils::Vector2(x+width, y+height);
+				return corners;
 			}
-			void AddRight(TreeNode* tn) {
-				delete right;
-				right = tn;
+			bool isLeaf() {
+				if (n1 == nullptr && n2 == nullptr) return true;
+				else return false;
 			}
-			int GetSmallerAxis() {
-				int width = std::abs(maxX - minX);
-				int height = std::abs(maxY- minY);
-				if (width > height) return height;
-				else return width;
-			}
-			bool IsLeaf() {
-				return (left == NULL && right == NULL);
-			}
-			void PrintString() {
-				std::cout << "Room x: (" << minX << ", " << maxX << ") y: (" << minY << ", " << maxY << ")" << std::endl;
-			}
-			~TreeNode() {
-				delete left;
-				delete right;
+			~BSPNode() {
+				delete n1;
+				delete n2;
 			}
 		};
-		void PartitionOnce(TreeNode* node);
-		void PartitionNode(TreeNode* node);
-		void SpawnRoom(TreeNode* node);
-		void BSPtree(int width, int height) {
-			//initialize dungeon node which becomes the root of the tree:
-			TreeNode* dungeon = new TreeNode(width - 1, height - 1, 0, 0);
-			//create additional tree nodes recursively with a helper function
-			//PartitionNode(dungeon, 4);
-			PartitionNode(dungeon);
-			std::cout << dungeon->right->left->IsLeaf() << dungeon->left->left->IsLeaf() << std::endl;
-			//traverse tree and spawn a room inside the limits of each leaf node
-			SpawnRoom(dungeon);
-			
-			dungeon->PrintString();
-			dungeon->left->PrintString();
-			dungeon->right->PrintString();
-			dungeon->left->left->PrintString();
-			dungeon->left->right->PrintString();
-			dungeon->right->left->PrintString();
-			dungeon->right->right->PrintString();
-			
-			//connect all sister nodes with a hallway.
 
-			//at the end delete dungeon
-			delete dungeon;
+		BSPNode* GenerateBSP(int xmin, int xmax, int ymin, int ymax, bool axis) {
+			//std::cout << "GENERATING" << std::endl;
+			if ((xmax - xmin) * (ymax - ymin) < MIN_ROOM_AREA) return NULL;
+			//bool doStop = rand() % 100 < 20;
+			//if (doStop) return NULL;
+			if (axis) { //axis is X
+				int z = (rand() % (xmax - xmin)) + xmin;
+				BSPNode* n1 = GenerateBSP(0, z, ymin, ymax, !axis);
+				BSPNode* n2 = GenerateBSP(z, xmax, ymin, ymax, !axis);
+				return new BSPNode(xmax - xmin, ymax - ymin, xmin, ymin, axis, n1, n2);
+			} else { //axis is Y
+				int z = (rand() % (ymax - ymin)) + ymin;
+				BSPNode* n1 = GenerateBSP(xmin, xmax, 0, z, !axis);
+				BSPNode* n2 = GenerateBSP(xmin, xmax, z, ymax, !axis);
+				return new BSPNode(xmax - xmin, ymax - ymin, xmin, ymin, !axis, n1, n2);
+			}
 		}
-		void PartitionOnce(TreeNode* node) {
-			if (node == NULL) return;
-			int axis = rand() % 2;
-			int rangeX = std::abs(node->maxX - node->minX);
-			int rangeY = std::abs(node->maxY - node->minY);
-			int value;
-			if (axis == 0) {
-				value = rand()%rangeX + (node->minX);
-			}
-			else {
-				value = rand()%rangeY + (node->minY);
-			}
-			TreeNode* left = NULL;
-			TreeNode* right = NULL;
-			if (axis == 0) {
-				left = new TreeNode(node->minX + value, node->maxY, node->minX, node->minY);
-				right = new TreeNode(node->maxX, node->maxY, node->minX + value, node->minY);
-			}
-			else {
-				left = new TreeNode(node->maxX, node->minY + value, node->minX, node->minY);
-				right = new TreeNode(node->maxX, node->maxY, node->minX, node->minY + value);
-			}
-			node->AddLeft(left);
-			node->AddRight(right);
-		}
-		void PartitionNode(TreeNode* node) {
-			PartitionOnce(node);
-			PartitionOnce(node->left);
-			PartitionOnce(node->right);
-			PartitionOnce(node->left->left);
-			PartitionOnce(node->left->right);
-			PartitionOnce(node->right->left);
-			PartitionOnce(node->right->right);
-			/*if (node->GetSmallerAxis() < SMALLEST_PARTITION_SIZE) return;
-			if (node == NULL) return;
-			std::cout << "Partitioning" << std::endl;
-			PartitionOnce(node);
-			if (node->left != NULL) {
-				PartitionNode(node->left);
-			}
-			if (node->right != NULL) {
-				PartitionNode(node->right);
-			}*/
-		}
-		void SpawnRoom(TreeNode* node) {
-			int paddingLeft = rand() % 5 + 1;
-			int paddingRight = rand() % 5 + 1;
-			int paddingUp = rand() % 5 + 1;
-			int paddingDown = rand() % 5 + 1;
-			if (node == NULL) return;
-			else if (node->IsLeaf()) {
-				int minX = node->minX + paddingLeft;
-				int maxX = node->maxX - paddingRight;
-				int minY = node->minY + paddingUp;
-				int maxY = node->maxY - paddingDown;
-				for (int x = minX; x < maxX; x++) {
-					for (int y = minY; y < maxY; y++) {
+
+		void RenderBSP(BSPNode* node){
+			if (node->n1 == NULL && node->n2 == NULL) {
+				//draw the room in coords
+				for (int x = node->x + 1; x < node->x + node->width - 2; x++) {
+					for (int y = node->y + 1; y < node->y + node->height - 2; y++) {
 						worldState::SetTileType(x, y, worldState::TileType::FLOOR);
 					}
 				}
+				return;
+			} else {
+				RenderBSP(node->n1);
+				RenderBSP(node->n2);
+				return;
 			}
-			else {
-				SpawnRoom(node->left);
-				SpawnRoom(node->right);
-			}
-
 		}
+
+		void RunBSP(int width, int height) {
+			BSPNode* node = GenerateBSP(0, width, 0, height, true);
+			RenderBSP(node);
+		}
+
 	}
 
 	namespace RoomPlacement {
@@ -151,7 +92,7 @@ namespace game {
 		const int ROOM_MAX_SIZE = 10;
 		const int ROOM_MIN_SIZE = 6;
 		const int NUMBER_OF_ROOMS = 30;
-		const int CHANCE_TO_DRAW_HALLWAY = 10; //out of 100. 50 = 50%
+		//const int CHANCE_TO_DRAW_HALLWAY = 50; //out of 100. 50 = 50%
 		std::vector<utils::Vector2> GenerateRoomLocations(int width, int height) {
 			//select random positions for rooms.
 			std::vector<utils::Vector2> positions(NUMBER_OF_ROOMS);
@@ -174,6 +115,21 @@ namespace game {
 				positions[i] = position;
 			}
 			//return positions
+			return positions;
+		}
+		std::vector<utils::Vector2> GenerateRoomLocationsGrid(int width, int height) {
+			std::vector<utils::Vector2> positions(NUMBER_OF_ROOMS);
+			for (int i = 0; i < NUMBER_OF_ROOMS / 2; i++) {
+				int interval = width / ((NUMBER_OF_ROOMS / 2) + 1);
+				int x = i * interval + interval;
+				for (int j = 0; j < 2; j++) {
+					int y = (j+1) * height / 3;
+					x += rand() % 10 - 5;
+					y += rand() % 20 - 10;
+					positions[(j * NUMBER_OF_ROOMS / 2) + (double)i].x = x;
+					positions[(j * NUMBER_OF_ROOMS / 2) + (double)i].y = y;
+				}
+			}
 			return positions;
 		}
 		//expand the room out to a random size between the min and max size.
@@ -200,7 +156,7 @@ namespace game {
 				for (int j = 0; j < NUMBER_OF_ROOMS; j++) {
 					if (j == i) continue;
 					int randomInt = rand() % 100;
-					if (randomInt > CHANCE_TO_DRAW_HALLWAY && i != j+1) continue;
+					if (/*randomInt > CHANCE_TO_DRAW_HALLWAY ||*/ i != j+1) continue;
 					int minx = std::fmin(positions[i].x, positions[j].x);
 					int maxx = std::fmax(positions[i].x, positions[j].x);
 					int miny = std::fmin(positions[i].y, positions[j].y);
@@ -225,7 +181,7 @@ namespace game {
 		}
 
 		utils::Vector2 GenerateAlgorithm(int width, int height) {
-			std::vector<utils::Vector2> positions = GenerateRoomLocations(width, height);
+			std::vector<utils::Vector2> positions = GenerateRoomLocationsGrid(width, height);
 			CreateRooms(positions);
 			CreateHallways(positions);
 			return positions[0];
@@ -234,7 +190,7 @@ namespace game {
 
 	void GenerateWorld(worldState::Tile* tileMap, int width, int height) {
 		//set randomSeed:
-		srand(WORLD_SEED);
+		//srand(WORLD_SEED);
 
 		//Randomly generate world map
 		int wallThickness = 1;
@@ -248,8 +204,24 @@ namespace game {
 				worldState::SetTileType(x, y, worldState::TileType::WALL);
 			}
 		}
-		//BSP::BSPtree(width, height);
-		utils::Vector2 playerSpawn = RoomPlacement::GenerateAlgorithm(width, height);
+
+		std::cout << width << std::endl;
+		std::cout << height << std::endl;
+		BSP::RunBSP(width, height);
+		utils::Vector2 playerSpawn(width / 2, height / 2);
+		//utils::Vector2 playerSpawn = RoomPlacement::GenerateAlgorithm(width, height);
+
+		//Set the outline to be walls
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				if ((x >= wallThickness && x < width - wallThickness)
+					&& (y >= wallThickness && y < height - wallThickness)) {
+					continue;
+				}
+				worldState::SetTileType(x, y, worldState::TileType::WALL);
+			}
+		}
+
 
 		//Spawn Player
 		entities::InitPlayer();

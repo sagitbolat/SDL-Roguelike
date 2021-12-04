@@ -45,7 +45,10 @@ namespace game {
 		}
 		
 		void SetTileType(int x, int y, TileType type) {
-			//if (x < 0 || y < 0 || x >= width || y >= height) return;
+			if (x < 0 || y < 0 || x >= width || y >= height) { 
+				std::cout << "Tried setting tile outside of map" << std::endl;
+				return; 
+			}
 			map[y * width + x].type = type;
 			return;
 		}
