@@ -22,4 +22,5 @@ namespace utils {
 
 	double EulerDistance(Vector2 a, Vector2 b);
 	int ManhattanDistance(Vector2 a, Vector2 b);
+	int ClampInt(int toClamp, int min, int max);
 }

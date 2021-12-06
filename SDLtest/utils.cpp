@@ -11,4 +11,7 @@ namespace utils{
 		int ydist = std::abs(a.y - b.y);
 		return xdist + ydist;
 	}
+	int ClampInt(int toClamp, int min, int max) {
+		return std::fmax(min, std::fmin(max, toClamp));
+	}
 }

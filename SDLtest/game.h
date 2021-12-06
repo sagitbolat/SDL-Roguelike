@@ -8,8 +8,8 @@ namespace game {
 	/*
 		Map size constants
 	*/
-	const int MAP_WIDTH = 80;
-	const int MAP_HEIGHT = 45;
+	const int MAP_WIDTH = 160;
+	const int MAP_HEIGHT = 90;
 
 	/*
 		Enum that represents gamestate
