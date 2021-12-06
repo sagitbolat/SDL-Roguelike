@@ -16,12 +16,15 @@ namespace game {
 		const int ROOM_MIN_SIZE = 6;
 		const int NUMBER_OF_ROOMS = 144;
 		const int NUMBER_OF_ROWS = 9;
-		const int CHANCE_TO_DRAW_HALLWAY = 30; //out of 100. 50 = 50%
+		const int CHANCE_TO_DRAW_HALLWAY = 40; //out of 100. 50 = 50%
+		const bool RANDOMIZE_ROOM_POSITION_OFFSET = true;
+		const int Y_OFFSET = 3;
+		const int X_OFFSET = 2;
 
 		utils::Vector2 PositionAtCoordinate(std::vector<utils::Vector2>* positions, int x, int y) {
-			int i = x * NUMBER_OF_ROWS + y;
+			int i = y * (NUMBER_OF_ROOMS/NUMBER_OF_ROWS) + x;
 			if (i >= NUMBER_OF_ROOMS) {
-				std::cout << "Array Overflow when calling PositionAtCoordinate()" << std::endl;
+				//std::cout << "Array Overflow when calling PositionAtCoordinate()" << std::endl;
 				return  (*positions)[0];
 			}
 			return (*positions)[i];
@@ -33,9 +36,11 @@ namespace game {
 				int interval = width / ((NUMBER_OF_ROOMS / NUMBER_OF_ROWS) + 1);
 				int x = i * interval + interval;
 				for (int j = 0; j < NUMBER_OF_ROWS; j++) {
-					int y = (j+1) * height / (NUMBER_OF_ROWS+1);
-					x += rand() % 10 - 5;
-					y += rand() % 20 - 10;
+					int y = (j + 1) * height / (NUMBER_OF_ROWS + 1);
+					if (RANDOMIZE_ROOM_POSITION_OFFSET) {
+						x += rand() % (X_OFFSET * 2) - X_OFFSET;
+						y += rand() % (Y_OFFSET * 2) - Y_OFFSET;
+					}
 					(*positions)[(j * NUMBER_OF_ROOMS / NUMBER_OF_ROWS) + (double)i].x = utils::ClampInt(x, 1, width - 2);;
 					(*positions)[(j * NUMBER_OF_ROOMS / NUMBER_OF_ROWS) + (double)i].y = utils::ClampInt(y, 1, height - 2);;
 				}
@@ -80,26 +85,19 @@ namespace game {
 			}
 		}
 		void CreateHallwaysLinear(std::vector<utils::Vector2>* positions) {
-			for (int i = 0; i < NUMBER_OF_ROOMS - 1; i++) {
-				int j = i + 1;
-				int k = rand() % NUMBER_OF_ROOMS;
-				if (k == i || k == i + 1 || k == i - 1) { //if k and i are already connected
-					if (k+2 >= NUMBER_OF_ROOMS - 1) {
-						k -= 2;
+			for (int i = 0; i < NUMBER_OF_ROOMS / NUMBER_OF_ROWS ; i++) {
+				for (int j = 0; j < NUMBER_OF_ROWS; j++) {
+					utils::Vector2 pos1 = PositionAtCoordinate(positions, i, j);
+					utils::Vector2 pos2 = PositionAtCoordinate(positions, i + 1, j);
+					utils::Vector2 pos3 = PositionAtCoordinate(positions, i, j + 1);
+					if (pos2 != utils::Vector2(0, 0)) {
+						if(rand() % 100 <= CHANCE_TO_DRAW_HALLWAY) DrawHallway(pos1, pos2);
 					}
-					else {
-						k += 2;
+					if (pos3 != utils::Vector2(0, 0)) {
+						if (rand() % 100 <= CHANCE_TO_DRAW_HALLWAY) DrawHallway(pos1, pos3);
 					}
 				}
-				DrawHallway((*positions)[i], (*positions)[j]);
-				int toDrawAnotherHall = rand() % 100;
-				if (toDrawAnotherHall <= CHANCE_TO_DRAW_HALLWAY)
-					DrawHallway((*positions)[i], (*positions)[k]);
 			}
-			/*for (int i = 0; i < NUMBER_OF_ROOMS / NUMBER_OF_ROOMS; i++) {
-				for (int j = 0)
-			} */
-
 		}
 
 		utils::Vector2 GenerateAlgorithm(int width, int height) {

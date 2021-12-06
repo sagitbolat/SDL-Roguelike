@@ -12,6 +12,13 @@ namespace utils {
 			x = x_;
 			y = y_;
 		}
+		bool operator==(Vector2 other) {
+			if (other.x == x && other.y == y) return true;
+			else return false;
+		}
+		bool operator!=(Vector2 other) {
+			return !operator==(other);
+		}
 	};
 	enum class Direction {
 		UP = 0,
