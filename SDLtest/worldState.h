@@ -31,6 +31,7 @@ namespace game {
 		void MovePlayer(int x, int y);
 		void MovePlayer(utils::Direction direction);
 		Tile* GetMap();
+		utils::Vector2 GetPlayerLocation();
 		void DeallocMap();
 	}
 }

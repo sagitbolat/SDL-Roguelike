@@ -118,6 +118,10 @@ namespace game {
 			return map;
 		}
 
+		utils::Vector2 GetPlayerLocation() {
+			return playerPos;
+		}
+
 		void DeallocMap() {
 			delete[] map;
 		}

@@ -13,10 +13,10 @@ namespace game {
 	namespace RoomPlacement {
 		//MIN AND MAX Axis Size of a room
 		const int ROOM_MAX_SIZE = 10;
-		const int ROOM_MIN_SIZE = 6;
+		const int ROOM_MIN_SIZE = 2;
 		const int NUMBER_OF_ROOMS = 144;
 		const int NUMBER_OF_ROWS = 9;
-		const int CHANCE_TO_DRAW_HALLWAY = 40; //out of 100. 50 = 50%
+		const int CHANCE_TO_DRAW_HALLWAY = 70; //out of 100. 50 = 50%
 		const bool RANDOMIZE_ROOM_POSITION_OFFSET = true;
 		const int Y_OFFSET = 3;
 		const int X_OFFSET = 2;
